@@ -1,24 +1,23 @@
-/**
- * 
- */
-package hashtable_data;
+
 public class Simple_Hashtable {
 	public static void main(String[] args) {
 		hashtable_simp h = new hashtable_simp(10,"divisonhash","linearprobing");
 //		hashtable h = new hashtable(13, "divisonhash", "quadraticprobing");
-		h.display();
-		h.insert(0);
-		h.insert(1);
+		
+//		hashtable_simp h = new hashtable_simp(10,"midsquare","linearprobing");
 
-		h.insert(17);
-		h.insert(13);
-		h.insert(26);
-		h.delete(17);
-//		h.insert(17);
-//		h.insert(18);
-//		h.insert(13);
 		h.display();
-		h.search(5);
+		h.insert(26);
+		h.insert(13);
+		
+		h.search(26);
+		h.search(50);
+		h.search(13);
+
+//		h.display();
+//		h.searchme(5);
+		
+//		System.out.println(h.search(5));
 	}
 }
 
@@ -55,18 +54,27 @@ class hashtable_simp {
 			 int hash1 = divisonhash(key);
 			 if (!isempty(hash1)) {
 					this.arr[hash1] = -5;
-				}
-			 
+				} 
 		 }
 	    }
-//	 sysout 
-	public void insert(int x) {
+	
+	 public void insert(int x) { 
+		int hash1 = -1;
 		if (hashfunc == "divisonhash") {
-			int hash1 = divisonhash(x);  //  v % tablesize;
-			// System.out.println(isempty(hash1));
-			if (isempty(hash1)) {
+			 hash1 = divisonhash(x); 
+			 } //  v % tablesize;
+		else if(hashfunc == "midsquare") {
+			 hash1 =  mid_square(x); 
+			 } //  v % tablesize;
+		else {
+			hash1 = -1;
+		}
+//			System.out.println(isempty(hash1));
+			if (isempty(hash1) && hash1 != -1 ) {
 				this.arr[hash1] = x;
-			} else {
+			} 
+			
+			else {
 				System.out.println(x+" collision with "+arr[hash1]+" at "+hash1);
 				if (collision_resolution == "linearprobing") {
 					int hashlinear = linearprobing(hash1);
@@ -78,26 +86,45 @@ class hashtable_simp {
 					System.out.println("quadratic insertion");
 				}
 			}
-			display();
-		}
+			display();		
 	}
 
-	public void search(int value) {
-		int hash1 = divisonhash(value);
-		if( value ==  arr[hash1]) {
-			System.out.println("found match at "+hash1);
+	 public int search(int target) {
+		 int hash = -1;
+		 if(hashfunc == "divisonhash") {
+ 			 hash = divisonhash(target);}
+		 else if(hashfunc == "mid_square") {
+	 			 hash = mid_square(target);}
+		 else {
+			  hash = -1;
+		 }
+		 //System.out.println(hash);
+		//System.out.println(arr[hash]);
+		if(isempty(hash)) {
+			System.out.println("Not Found");
 		}
-		else if(isempty(hash1)) {
-			System.out.println("not found");		
-		}
-		else if(!isempty(hash1)) {
-			System.out.println("occupied and no match");
-			if( value ==  arr[linearprobing(hash1)-1]) {
-				System.out.println("found match in lineaer");
-			}
-//			 linearprobing(hash1);
-		}
-	}
+		 else if (this.arr[hash] == target) {
+					System.out.println("Found at " + hash);
+					return hash;
+				}
+		 else {
+			 System.out.println("collision");
+				if(collision_resolution =="linearprobing") {
+					int attempt = 1;
+					 int h1 = hash;
+					 while(!isempty(h1)) {
+						 int fi = attempt;
+						 h1 = (hash + fi)%tablesize;
+						 System.out.println("h1 "+h1);
+						 attempt++;
+					 }
+				} 
+		 }
+				System.out.println("Not Found ");
+				return -1;
+	 }
+ 
+	
 	public int linearprobing(int hash1) {
 		int attempt = 1;
 		int h1 = hash1;
@@ -110,21 +137,13 @@ class hashtable_simp {
 		return h1;
 	}
 
-	public int linearprobing2(int hash1, int v) {
-		int attempt = 1;
-		int h1 = hash1;
-		while (isempty(h1) && arr[h1]!= v) {
-			int fi = attempt;
-			h1 = (hash1 + fi) % tablesize;
-			System.out.println("attempt " + h1);
-			attempt++;
-		}
-		return h1;
-	}
-	
-	
 	public int divisonhash(int v) {
 		int mod = v % tablesize;
+		return mod;
+	}
+	
+	public int mid_square(int v) {
+		int mod = (v*v)% tablesize;
 		return mod;
 	}
 

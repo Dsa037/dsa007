@@ -1,11 +1,10 @@
-package hashtable_data;
 public class LinkedList {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		singleLinkedlist mylist = new singleLinkedlist();
 		
 //		mylist.display();
-		mylist.insertelements(1, 2, 3, 4, 5, 6, 7, 8, 9);
+		mylist.insertelements(1, 2, 10, 4, 5, 6, 7, 8, 9);
 //		mylist.display();
 //		mylist.insertAt1st(77);
 //		mylist.display();
@@ -21,6 +20,7 @@ public class LinkedList {
 //		mylist.display();	
 	mylist.insert(5);
 		mylist.lenght();
+		mylist.find(3);
 
 
 		mylist.display();
@@ -37,29 +37,27 @@ public class LinkedList {
  		mylist.secondinsert(10);
  		mylist.display();
 
-
-
 	}
 }
 
-class link_Node {
+class Node {
 	public int data;
-	public link_Node next;
+	public Node next;
 
-	public link_Node(int d) {
+	public Node(int d) {
 		this.data = d;
 		next = null;
 	}
 
-	public link_Node(int d, link_Node n) {
+	public Node(int d, Node n) {
 		this.data = d;
 		next = n;
 	}
 }
 
 class singleLinkedlist {
-	private link_Node head;
-	private link_Node tail;
+	private Node head;
+	private Node tail;
 	private int size = 0;
 
 	singleLinkedlist() {
@@ -74,15 +72,15 @@ class singleLinkedlist {
 
 	public void insertelements(int... a) {
 		for (int i : a) {
-			link_Node newNode = new link_Node(i);
+			Node newNode = new Node(i);
 //			size++;
 			insert(i);
 		}
 	}
-	
+			
 	public void deleteLast() {
-		link_Node target = head;
-		link_Node pred = null;
+		Node target = head;
+		Node pred = null;
 		
 		while (target.next != null) {
 			pred = target;
@@ -97,8 +95,8 @@ class singleLinkedlist {
 		if (x > size) { // if x size is grater the node
 			System.out.println("Node Size is less then " + x + "Node size is " + size);
 		} else { // else x size is less then or equal the node
-			link_Node target = head;
-			link_Node pred = null;
+			Node target = head;
+			Node pred = null;
 			int countnode = 1;
 			if (x == 1) { // deleting 1st node
 				head = target.next;
@@ -121,8 +119,8 @@ class singleLinkedlist {
 	}
 
 	public void seconddelete() {
-		link_Node target = head;
-	    link_Node pred = null;
+		Node target = head;
+		Node pred = null;
 		while (target.next.next != null) {
 			pred = target;
 		    target = target.next;
@@ -134,15 +132,15 @@ class singleLinkedlist {
 	}
 	
 	public void secondinsert(int x) {
-		link_Node newNode = new link_Node(x); // create a new node		
+		Node newNode = new Node(x); // create a new node		
 		size++; 
 		if (head == null) { // first time insertion
 			head = newNode;
 			System.out.println("1st node added " + x);
 		} 
 		else { 
-			link_Node target = head;
-			link_Node pred = null;
+			Node target = head;
+			Node pred = null;
 			while (target.next != null) {
 				pred = target;
 			    target = target.next;
@@ -152,18 +150,22 @@ class singleLinkedlist {
 			System.out.println("node added in second last " + x);
 		}
 	}
-
+		
 	// insert x at last position
 	public void insert(int x) {
-		link_Node newNode = new link_Node(x); // create a new node
+		Node newNode = new Node(x); // create a new node
+		
 		size++; 
 		if (head == null) { // first time insertion
 			head = newNode;
+			
 			System.out.println("1st node added " + x);
 		} 
+		
 		else { // insert at last
 					// access last node
-			link_Node target = head;
+			Node target = head;
+
 			while (target.next != null) {
 				target = target.next;
 			}
@@ -178,7 +180,7 @@ class singleLinkedlist {
 		if (size == 0) {
 			System.out.println(" list is empty ");
 		} else {
-			link_Node target = head;
+			Node target = head;
 			while (target != null) {
 				System.out.print(target.data + ", ");
 				target = target.next;
@@ -193,11 +195,11 @@ class singleLinkedlist {
 		if (head == null && size == 0) { // if list is empty and user enter > then 1
 			System.out.println("insertion unsccessfull, list is empty try insert(" + x + ")");
 		} else {
-			link_Node newNode = new link_Node(x);
+			Node newNode = new Node(x);
 			size++;
-			link_Node target = head;
+			Node target = head;
 			int nodecount = 1;
-			link_Node pred = null;
+			Node pred = null;
 			while (nodecount < pos) {// to access the position
 				nodecount++;
 				pred = target;
@@ -217,14 +219,14 @@ class singleLinkedlist {
 	}
 
 	public void insertAt1st(int n) {
-		link_Node newNode = new link_Node(n);
-		newNode.next = head;
+		Node newNode = new Node(n);
+		newNode.next =head;
 		head = newNode;
 		
 	}
 	
-	 public void find( int x ){
-	        link_Node target = head;
+	public void find(int x ){
+	        Node target = head;
 	        int counter = 1;
 	        boolean isMatch = false;
 
@@ -241,13 +243,12 @@ class singleLinkedlist {
 	        if(isMatch == false){
 	            System.out.println("not found");
 	        }
-
 	    }
 	
 	public String middle() { // middle node finding by by slow and fast trick
-		link_Node slow = head;
-		link_Node fast = head;
-		link_Node target = head;
+		Node slow = head;
+		Node fast = head;
+		Node target = head;
 		while (fast != null && fast.next != null) {
 			slow = slow.next;
 			fast = fast.next.next;
@@ -263,7 +264,7 @@ class singleLinkedlist {
 
 	public int findbyValue(int value) { // finding node by data
 		int add = 1;
-		link_Node target = head;
+		Node target = head;
 		try {
 			while (target.data != value) {
 				target = target.next;
@@ -278,7 +279,7 @@ class singleLinkedlist {
 	
 	public int findNodevalue(int add) { // finding data by node address
 		int count = 1;
-		link_Node target = head;
+		Node target = head;
 
 		if (add > size) { // if address grater then size
 			return -5;
